@@ -38,7 +38,7 @@ function calculate_typing_metrics() {
         cps = cpm / 60.0;
         ms_per_character = (1.0 / cps) * 1000.0;
 
-        printf "'$CYAN'Milliseconds per character : %.0f ms\n'$RESET'", ms_per_character;
+        printf "'$CYAN'Milliseconds per character : %.0f ms\n\n'$RESET'", ms_per_character;
         printf "Characters per minute (CPM): %.0f\n", cpm;
         printf "Characters per second (CPS): %.8f\n", cps;
     }'
@@ -57,6 +57,9 @@ last_mode=$(echo "$last_result_response" | jq -r '.data.mode')
 last_mode2=$(echo "$last_result_response" | jq -r '.data.mode2')
 
 clear -x
+
+# Print header
+echo -e "\\n${YELLOW}Last result on ${BLUE}MonkeyType${RESET}\\n"
 
 # Print last result details
 echo -e "${RED}Words per minute (WPM)     : $last_wpm${RESET}"

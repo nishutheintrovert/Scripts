@@ -36,23 +36,25 @@ words_best_response=$(api_request "$WORDS_BEST_URL" "$API_KEY")
 clear -x
 
 # Print header
-echo -e "\\n${CYAN}Personal best on ${BLUE}MonkeyType${RESET}\\n"
+echo -e "\\n${YELLOW}Personal best on ${BLUE}MonkeyType${RESET}\\n"
 printf "${WHITE}%-20s ${RED}%-20s ${GREEN}%-20s${RESET}\n" "Mode" "Speed (WPM)" "Accuracy (%)"
+
+# Print words bests
+for words in 10 25 50; do
+    wpm=$(echo $words_best_response | jq -r ".data.\"$words\"[0].wpm")
+    acc=$(echo $words_best_response | jq -r ".data.\"$words\"[0].acc")
+    printf "${WHITE}%-20s ${RED}%-20s ${GREEN}%-20s${RESET}\n" "$words Words" "$wpm" "$acc"
+done
+
+printf "${WHITE}%-20s ${RED}%-20s ${GREEN}%-20s${RESET}\n" "100 Words" "$(echo $words_best_response | jq -r '.data."100"[1].wpm')" "$(echo $words_best_response | jq -r '.data."100"[1].acc')" # 100[0] fetching wrong array
+
+echo ""
 
 # Print time bests
 for duration in 15 30 60 120; do
     wpm=$(echo $time_best_response | jq -r ".data.\"$duration\"[0].wpm")
     acc=$(echo $time_best_response | jq -r ".data.\"$duration\"[0].acc")
     printf "${WHITE}%-20s ${RED}%-20s ${GREEN}%-20s${RESET}\n" "$duration Seconds" "$wpm" "$acc"
-done
-
-echo -e ""
-
-# Print words bests
-for words in 10 25 50 100; do
-    wpm=$(echo $words_best_response | jq -r ".data.\"$words\"[0].wpm")
-    acc=$(echo $words_best_response | jq -r ".data.\"$words\"[0].acc")
-    printf "${WHITE}%-20s ${RED}%-20s ${GREEN}%-20s${RESET}\n" "$words Words" "$wpm" "$acc"
 done
 
 # Only for debugging
