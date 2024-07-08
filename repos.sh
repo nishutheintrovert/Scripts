@@ -8,6 +8,7 @@ directories=(
     "/d/Registry"
     "/d/Scripts"
     "/d/Text"
+    "/d/Config"
 )
 
 # Iterate through the list and call the function for each directory
