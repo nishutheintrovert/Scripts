@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # API Key and URL
-API_KEY="NjY3ODM4YWM2ZGM5NjdlZjk4YTVjYzUyLmgyOG5rU1V4eUNJd3N2cVIxbzBKQzVmVXNZMVdtQ0tz"
+API_KEY="MonkeyType_API_Key"
 LAST_RESULT_URL="https://api.monkeytype.com/results/last"
 
 # ANSI color codes
