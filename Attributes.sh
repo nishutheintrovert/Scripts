@@ -25,17 +25,20 @@ declare -A eol_settings=(
 )
 
 # Append detected text files to .gitattributes
-echo -e "# Detected text files\\n" >>.gitattributes
+echo -e "# Detected text files\n" >>.gitattributes
 find . -type f ! -path '*/.git/*' ! -size 0 | while IFS= read -r file; do
-    extension="${file##*.}"
-    if [ -n "$extension" ] && [ "$extension" != "$file" ]; then
-        # Check if the file is a text file
-        if file -b --mime-type "$file" | grep -q "text/"; then
-            if ! grep -q "^\*.$extension " .gitattributes; then
-                if [ -n "${eol_settings[$extension]}" ]; then
-                    echo "*.$extension text eol=${eol_settings[$extension]}" >>.gitattributes
-                else
-                    echo "*.$extension text" >>.gitattributes
+    basename="${file##*/}"
+    if [[ "$basename" == *.* ]]; then
+        extension="${basename##*.}"
+        if [ -n "$extension" ]; then
+            # Check if the file is a text file
+            if file -b --mime-type "$file" | grep -q "text/"; then
+                if ! grep -q "^\*.$extension " .gitattributes; then
+                    if [ -n "${eol_settings[$extension]}" ]; then
+                        echo "*.$extension text eol=${eol_settings[$extension]}" >>.gitattributes
+                    else
+                        echo "*.$extension text" >>.gitattributes
+                    fi
                 fi
             fi
         fi
@@ -43,14 +46,17 @@ find . -type f ! -path '*/.git/*' ! -size 0 | while IFS= read -r file; do
 done
 
 # Append detected binary files to .gitattributes
-echo -e "\\n# Detected binary files\\n" >>.gitattributes
+echo -e "\n# Detected binary files\n" >>.gitattributes
 find . -type f ! -path '*/.git/*' ! -size 0 | while IFS= read -r file; do
-    extension="${file##*.}"
-    if [ -n "$extension" ] && [ "$extension" != "$file" ]; then
-        # Check if the file is not file
-        if ! file -b --mime-type "$file" | grep -q "text/"; then
-            if ! grep -q "^\*.$extension " .gitattributes; then
-                echo "*.$extension binary" >>.gitattributes
+    basename="${file##*/}"
+    if [[ "$basename" == *.* ]]; then
+        extension="${basename##*.}"
+        if [ -n "$extension" ]; then
+            # Check if the file is not a text file
+            if ! file -b --mime-type "$file" | grep -q "text/"; then
+                if ! grep -q "^\*.$extension " .gitattributes; then
+                    echo "*.$extension binary" >>.gitattributes
+                fi
             fi
         fi
     fi
@@ -62,14 +68,17 @@ declare -A echoed_extensions
 
 # Find files and process each one
 find . -type f ! -path '*/.git/*' | while IFS= read -r file; do
-    extension="${file##*.}" # Extract the file extension
-    # Check if the extension is not empty, hasn't been echoed yet, and is not equal to the whole file name
-    if [ -n "$extension" ] && [ -z "${echoed_extensions[$extension]}" ] && [ "$extension" != "$file" ]; then
-        # Check if the extension is not listed in .gitattributes
-        if ! grep -q "^\*.$extension" .gitattributes 2>/dev/null; then
-            echo -e "\033[0;31m$extension\033[0m" # Print in red if not found
+    basename="${file##*/}"
+    if [[ "$basename" == *.* ]]; then
+        extension="${basename##*.}"
+        # Check if the extension is not empty and hasn't been echoed yet
+        if [ -n "$extension" ] && [ -z "${echoed_extensions[$extension]}" ]; then
+            # Check if the extension is not listed in .gitattributes
+            if ! grep -q "^\*.$extension" .gitattributes 2>/dev/null; then
+                echo -e "\033[0;31m$extension\033[0m" # Print in red if not found
+            fi
+            # Mark the extension as echoed
+            echoed_extensions[$extension]=1
         fi
-        # Mark the extension as echoed
-        echoed_extensions[$extension]=1
     fi
 done
