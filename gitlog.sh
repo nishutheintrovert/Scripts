@@ -25,11 +25,11 @@ echo -e "${MAGENTA}*************************************************************
 directories=(
     "/d/AHK"
     "/d/Codespace"
+    "/d/Config"
     "/d/Playground"
     "/d/Registry"
     "/d/Scripts"
     "/d/Text"
-    "/d/Config"
 )
 
 # Initialize a counter for numbering the directories
@@ -38,7 +38,7 @@ count=0
 # Iterate through the list and run 'git status' for each directory
 for dir in "${directories[@]}"; do
     echo -e "${CYAN}cd $dir${RESET}"
-    cd "$dir" && git log # $Argument
+    cd "$dir" && git log --max-count=1 # $Argument
     count=$((count + 1))
 done
 
