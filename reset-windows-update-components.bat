@@ -1,4 +1,5 @@
 @echo off
+REM Resets all Windows Update Components
 set /p YourVariableName="Are you sure? : "
 if /i "%YourVariableName%"=="Y" (
 

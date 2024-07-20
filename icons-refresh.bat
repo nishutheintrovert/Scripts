@@ -1,4 +1,5 @@
 @echo off
+REM Resets Icons
 echo Run AS ADMIN
 set /p YourVariableName="Are you sure? : "
 if /i "%YourVariableName%"=="Y" (

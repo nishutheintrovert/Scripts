@@ -1,4 +1,5 @@
 @echo off
+REM Resets Quick Access Folders
 set /p YourVariableName="Are you sure you want to ResetFileExplorerQuickAccess ? : "
 if /i "%YourVariableName%"=="Y" (
     cd "%AppData%\Microsoft\Windows\Recent\AutomaticDestinations"
