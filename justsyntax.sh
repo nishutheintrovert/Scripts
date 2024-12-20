@@ -34,3 +34,13 @@ png2ico() {
     convert -resize x${s} -gravity center -crop ${s}x${s}+0+0 "$i" -colors 256 -background transparent "$o"
 }
 png2ico image.png
+
+# To reduce file size of nilu didi's camera's photos to fit removebg's limit
+magick 1.jpg -resize 8000x6000 -strip resized_1.jpg
+
+# To process files one by one using remove bg
+for file in ./Pics/*.jpg; do
+    echo "Processing $file..."
+    removebg "$file"
+    sleep 20
+done
