@@ -23,13 +23,16 @@ echo -e "${MAGENTA}*************************************************************
 
 # Array of directories
 directories=(
-    "/d/AHK"
-    "/d/Codespace"
-    "/d/Config"
-    "/d/Playground"
-    "/d/Registry"
-    "/d/Scripts"
-    "/d/Text"
+    "/c/HDD_Backup/AHK"
+    "/c/HDD_Backup/Codespace"
+    "/c/HDD_Backup/College"
+    "/c/HDD_Backup/Config"
+    "/c/HDD_Backup/Documents"
+    "/c/HDD_Backup/Environment"
+    "/c/HDD_Backup/Playground"
+    "/c/HDD_Backup/Registry"
+    "/c/HDD_Backup/Scripts"
+    "/c/HDD_Backup/Text"
 )
 
 # Initialize a counter for numbering the directories
