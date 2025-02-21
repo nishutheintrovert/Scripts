@@ -17,12 +17,13 @@ ARCHIVE_NAME="world.rar"
 WINRAR_PATH="/c/Program Files/WinRAR/rar.exe"
 
 # Prompt user for confirmation
-read -p "Do you want to proceed with the backup? (Y/N): " choice
+echo -ne "${CYAN}Do you want to proceed with the backup? (Y/N):${RESET} "
+read choice
 
 # Convert input to uppercase to handle lowercase responses
 choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
 
-if [[ "$choice" != "Y" ]]; then
+if [[ "$choice" != "Y" && "$choice" != "YES" ]]; then
     echo -e "${RED}Backup aborted by user.${RESET}"
     exit 0
 fi
