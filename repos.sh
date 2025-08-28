@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# List of directories
+# Array of directories
 directories=(
-    "/c/HDD_Backup/AHK"
-    "/c/HDD_Backup/Codespace"
-    "/c/HDD_Backup/College"
-    "/c/HDD_Backup/Config"
-    "/c/HDD_Backup/Documents"
-    "/c/HDD_Backup/Environment"
-    "/c/HDD_Backup/Playground"
-    "/c/HDD_Backup/Registry"
-    "/c/HDD_Backup/Scripts"
-    "/c/HDD_Backup/Text"
+    "/d/AHK"
+    "/d/Codespace"
+    "/d/College"
+    "/d/Config"
+    "/d/Documents"
+    "/d/Environment"
+    "/d/Playground"
+    "/d/Registry"
+    "/d/Scripts"
+    "/d/Text"
 )
 
 # Initialize a counter for numbering the directories
