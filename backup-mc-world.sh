@@ -10,10 +10,9 @@ CYAN='\033[0;96m'
 WHITE='\033[0;97m'
 RESET='\033[0m'
 
-# Defining variables
-SOURCE_DIR="/c/Minecraft_Server/world/"
-DEST_DIR="/c/Minecraft_Server/"
-ARCHIVE_NAME="world.rar"
+# Paths
+SOURCE_DIR="/c/Minecraft/Hunters_Hell/world/"
+ARCHIVE_PATH="/c/Minecraft/Hunters_Hell/world.rar"
 WINRAR_PATH="/c/Program Files/WinRAR/rar.exe"
 
 # Prompt user for confirmation
@@ -28,25 +27,28 @@ if [[ "$choice" != "Y" && "$choice" != "YES" ]]; then
     exit 0
 fi
 
-# Creating Archive
-"$WINRAR_PATH" a -r -ep1 "$ARCHIVE_NAME" "$SOURCE_DIR"
+# Step 1: Create archive
+"$WINRAR_PATH" a -r -rr5 -ep1 temp.rar "$SOURCE_DIR"
 if [ $? -ne 0 ]; then
-    echo -e ${RED}Error creating archive!${RESET}
+    echo -e "${RED}Archiving Failed!${RESET}"
     exit 1
 fi
 
-# Testing Archive
-"$WINRAR_PATH" t "$ARCHIVE_NAME"
+# Step 2: Test archive
+"$WINRAR_PATH" t temp.rar
 if [ $? -ne 0 ]; then
-    echo -e ${RED}Archive test failed!${RESET}
+    echo -e "${RED}Archive test failed. Keeping old backup.${RESET}"
+    rm -f temp.rar
     exit 1
 fi
 
-# # Moving Archive
-# mv -f "$ARCHIVE_NAME" "$DEST_DIR"
-# if [ $? -ne 0 ]; then
-#     echo -e ${RED}Error moving archive!${RESET}
-#     exit 1
-# fi
+# Step 3: Replace old archive
+mv -f temp.rar "$ARCHIVE_PATH"
 
-echo -e ${GREEN}BACKUP COMPLETE!${RESET}
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Error replacing archive!${RESET}"
+    exit 1
+fi
+
+# Done
+echo -e "${GREEN}BACKUP COMPLETE!${RESET}"
