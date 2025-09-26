@@ -44,3 +44,9 @@ for file in ./Pics/*.jpg; do
     removebg "$file"
     sleep 20
 done
+
+# Exit on error, unset variable, or pipe failure
+set -euo pipefail
+
+# Move to the directory where this script resides
+cd "$(dirname "$0")" || exit 1
