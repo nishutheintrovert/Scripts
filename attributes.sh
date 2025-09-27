@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Define ANSI color variables
+RED='\033[0;31m'
+GREEN='\033[0;92m'
+YELLOW='\033[0;93m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;95m'
+CYAN='\033[0;96m'
+WHITE='\033[0;97m'
+RESET='\033[0m'
+
 # Delete empty files before processing (file --mime-encoding outputs binary for empty files regardless of extension)
 find . -type f ! -path '*/.git/*' -empty -print -delete
 
@@ -16,8 +26,8 @@ declare -A eol_settings=(
     ["vbs"]="crlf"
 )
 
-# Create new .gitattributes file
-echo "Creating .gitattributes"
+# Initiate new .gitattributes file with text section header
+echo -e "${BLUE}Creating .gitattributes${RESET}"
 cat >.gitattributes <<EOL
 # THIS FILE IS AUTO-GENERATED
 # AND MUST BE CHECKED FOR RELIABILITY
@@ -26,50 +36,37 @@ cat >.gitattributes <<EOL
 
 EOL
 
-# Collect unique text file extensions
-mapfile -t textextensions < <(
+# Collect all extensions into array (excluding .git)
+mapfile -t extensions < <(
     find . -type f ! -path '*/.git/*' -print0 |
-        xargs -0 -r file --mime-encoding |
-        grep -v 'binary' |
-        cut -d: -f1 |
-        tr '\n' '\0' |
-        xargs -0 -r -n1 basename |
-        while IFS= read -r f; do
-            echo "${f##*.}"
-        done |
+        xargs -0 -r file -N --mime-encoding |
+        while IFS= read -r f; do echo "${f##*.}"; done |
         sort -u
 )
 
-# Write text file rules to .gitattributes
-for ext in "${textextensions[@]}"; do
-    if [[ -n ${eol_settings[$ext]} ]]; then
-        echo "*.$ext text eol=${eol_settings[$ext]}" >>.gitattributes
-    else
-        echo "*.$ext text" >>.gitattributes
-    fi
-done
+# Filter text files and rules to .gitattributes
+echo -e "${CYAN}Appending text files${RESET}"
+printf '%s\0' "${extensions[@]}" |
+    grep -zv 'binary' | cut -zd: -f1 |
+    while IFS= read -r -d '' ext; do
+        if [[ -n ${eol_settings[$ext]} ]]; then
+            echo "*.$ext text eol=${eol_settings[$ext]}" >>.gitattributes
+        else
+            echo "*.$ext text" >>.gitattributes
+        fi
+    done
 
 # Add binary section header
 echo -e "\n# Detected binary files\n" >>.gitattributes
 
-# Collect unique binary file extensions
-mapfile -t binaryextensions < <(
-    find . -type f ! -path '*/.git/*' -print0 |
-        xargs -0 -r file --mime-encoding |
-        grep 'binary' |
-        cut -d: -f1 |
-        tr '\n' '\0' |
-        xargs -0 -r -n1 basename |
-        while IFS= read -r f; do
-            echo "${f##*.}"
-        done |
-        sort -u
-)
-
-# Write binary file rules to .gitattributes
-for ext in "${binaryextensions[@]}"; do
-    echo "*.$ext binary" >>.gitattributes
-done
+# Filter binary files and rules to .gitattributes
+echo -e "${YELLOW}Appending binary files${RESET}"
+printf '%s\0' "${extensions[@]}" |
+    grep -z 'binary' | cut -zd: -f1 |
+    while IFS= read -r -d '' ext; do
+        echo "*.$ext binary" >>.gitattributes
+    done
 
 # Normalize line endings to CRLF
 unix2dos .gitattributes >/dev/null 2>&1
+echo -e "${GREEN}Done!================================${RESET}"

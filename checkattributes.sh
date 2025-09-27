@@ -1,21 +1,33 @@
 #!/bin/bash
 
-# Declare an associative array to track echoed extensions
-declare -A echoed_extensions
+# Define ANSI color variables
+RED='\033[0;31m'
+GREEN='\033[0;92m'
+YELLOW='\033[0;93m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;95m'
+CYAN='\033[0;96m'
+WHITE='\033[0;97m'
+RESET='\033[0m'
 
-# Find files and process each one
-find . -type f ! -path '*/.git/*' | while IFS= read -r file; do
-    basename="${file##*/}"
-    if [[ "$basename" == *.* ]]; then
-        extension="${basename##*.}"
-        # Check if the extension is not empty and hasn't been echoed yet
-        if [ -n "$extension" ] && [ -z "${echoed_extensions[$extension]}" ]; then
-            # Check if the extension is not listed in .gitattributes
-            if ! grep -q "^\*.$extension" .gitattributes 2>/dev/null; then
-                echo -e "\033[0;31m$extension\033[0m" # Print in red if not found
-            fi
-            # Mark the extension as echoed
-            echoed_extensions[$extension]=1
+# Delete empty files before processing (file --mime-encoding outputs binary for empty files regardless of extension)
+find . -type f ! -path '*/.git/*' -empty -print -delete
+
+# Collect all extensions into array (excluding .git)
+mapfile -t extensions < <(
+    find . -type f ! -path '*/.git/*' -print0 |
+        xargs -0 -r file -N --mime-encoding |
+        while IFS= read -r f; do echo "${f##*.}"; done |
+        sort -u
+)
+
+# Filter all extension to check against gitattributes
+echo -e "${YELLOW}Checking extensions against .gitattributes${RESET}"
+printf '%s\0' "${extensions[@]}" |
+    cut -zd: -f1 |
+    while IFS= read -r -d '' ext; do
+        if ! grep -q "^\*.$ext" .gitattributes 2>/dev/null; then
+            echo -e "${RED}$ext${RESET}" # Print in red if not found
         fi
-    fi
-done
+    done
+echo -e "${GREEN}Done!================================${RESET}"
