@@ -12,6 +12,7 @@ directories=(
     "/d/Registry"
     "/d/Scripts"
     "/d/Text"
+    "/d/skinview3d"
 )
 
 # Initialize a counter for numbering the directories
