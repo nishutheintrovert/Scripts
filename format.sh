@@ -42,4 +42,6 @@ find . ! -path '*/.git/*' -type f \
     \( -name "*.bash" -o -name "*.fish" -o -name "*.ksh" -o -name "*.sh" -o -name "*.zsh" \) \
     -print0 | xargs -0 -r -P 4 -n 10 dos2unix >/dev/null 2>&1
 
+# --- Reset desktop.ini files attributes to be system and hidden
+attrib +s +h desktop.ini
 echo -e "${GREEN}Done!================================${RESET}"
