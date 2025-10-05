@@ -22,7 +22,7 @@ if not exist "%~n0.exe" (
 endlocal & exit /b %errorlevel%
 
 */
-
+// This file is downloaded from: https://github.com/npocmaka/batch.scripts
 // To create this I've stole code from :
 // http://inputsimulator.codeplex.com/
 // https://stackoverflow.com/a/8022534/388389
@@ -344,27 +344,23 @@ namespace MouseMover
 
        static void PrintHelp() {
             String filename = Environment.GetCommandLineArgs()[0];
-            filename = filename.Substring(0, filename.Length);
+            filename = System.IO.Path.GetFileName(filename);
 
-            Console.WriteLine("Controls the mouse cursor through command line.");
+            Console.WriteLine(filename+" controls the mouse cursor through command line.");
             Console.WriteLine("");
-            Console.WriteLine(filename+"        [Click] [DoubleClick] [RightClick] [Position] [ScrollUp N] [ScrollDown N] [MoveBy NxM] [MoveTo NxM] [DragBy NxM] [DragTo NxM]");
+            Console.WriteLine("Usage  : "+filename+" action [arguments]");
             Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("Click                Clicks at the current position.");
-            Console.WriteLine("DoubleClick          Double clicks at the current position.");
-            Console.WriteLine("RightClick           Clicks with the right mouse button at the current position.");
-            Console.WriteLine("Position             Prints the mouse cursor position.");
-            Console.WriteLine("ScrollUp N           Scrolls up the mouse wheel, requires a number for the scroll ammount.");
-            Console.WriteLine("ScrollDown N         Scrolls down the mouse wheel ,requires a number for the scroll ammount.");
-            Console.WriteLine("MoveBy NxM           Moves the mouse curosor to relative coordinates, requires two numbers separated by lower case 'x'.");
-            Console.WriteLine("MoveTo NxM           Moves the mouse curosor to absolute coordinates requires two numbers separated by lower case 'x'.");
-            Console.WriteLine("DragBy NxM           Drags the mouse curosor to relative coordinates, requires two numbers separated by lower case 'x'.");
-            Console.WriteLine("DragTo NxM           Drags the mouse curosor to absolute coordinates, requires two numbers separated by lower case 'x'.");
-            Console.WriteLine("");
-            Console.WriteLine("Consider using only " +filename+" (without extensions) to prevent print of the errormessages after the first start");
-            Console.WriteLine("in case you are using batch-wrapped script.");
-
+            Console.WriteLine("Actions:");
+            Console.WriteLine("         Click           - Clicks at the current position.");
+            Console.WriteLine("         DoubleClick     - Double clicks at the current position.");
+            Console.WriteLine("         RightClick      - Clicks with the right mouse button at the current position.");
+            Console.WriteLine("         Position        - Prints the mouse cursor position.");
+            Console.WriteLine("         ScrollUp N      - Scrolls up the mouse wheel, requires a number for the scroll ammount.");
+            Console.WriteLine("         ScrollDown N    - Scrolls down the mouse wheel, requires a number for the scroll ammount.");
+            Console.WriteLine("         MoveBy NxM      - Moves the mouse curosor to relative coordinates, requires two numbers separated by lower case 'x'.");
+            Console.WriteLine("         MoveTo NxM      - Moves the mouse curosor to absolute coordinates, requires two numbers separated by lower case 'x'.");
+            Console.WriteLine("         DragBy NxM      - Drags the mouse curosor to relative coordinates, requires two numbers separated by lower case 'x'.");
+            Console.WriteLine("         DragTo NxM      - Drags the mouse curosor to absolute coordinates, requires two numbers separated by lower case 'x'.");
         }
 
         public static void Main(String[] args) {
