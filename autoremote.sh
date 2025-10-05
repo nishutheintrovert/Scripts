@@ -35,7 +35,7 @@ if remote=$(gh repo view "$reponame" --json url --template "{{.url}}" 2>/dev/nul
 else
     # Create GitHub repository and store the remote URL
     echo -e "${GREEN}Creating remote ${MAGENTA}$reponame${GREEN} on ${BLUE}GitHub${RESET}"
-    if ! remote=$(gh repo create "$reponame" --private 2>/dev/null); then
+    if ! remote=$(gh repo create "$reponame" --private -d "cd $PWD" 2>/dev/null); then
         echo -e "${RED}Failed to create repository on ${BLUE}GitHub${RESET}"
         exit 1
     fi
