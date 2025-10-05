@@ -50,3 +50,6 @@ set -euo pipefail
 
 # Move to the directory where this script resides
 cd "$(dirname "$0")" || exit 1
+
+# Removes the symbolic reference to the default branch (removes extra origin/HEAD)
+git remote set-head origin --delete
