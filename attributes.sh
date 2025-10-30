@@ -40,14 +40,14 @@ EOL
 mapfile -t extensions < <(
     find . -type f ! -path '*/.git/*' -print0 |
         xargs -0 -r file -N --mime-encoding |
-        while IFS= read -r f; do echo "${f##*.}"; done |
-        sort -u
+        while IFS= read -r f; do echo "${f##*.}"; done
 )
 
 # Filter text files and rules to .gitattributes
 echo -e "${CYAN}Appending text files${RESET}"
 printf '%s\0' "${extensions[@]}" |
     grep -zv 'binary' | cut -zd: -f1 |
+    sort -zu |
     while IFS= read -r -d '' ext; do
         if [[ -n ${eol_settings[$ext]} ]]; then
             echo "*.$ext text eol=${eol_settings[$ext]}" >>.gitattributes
@@ -63,6 +63,7 @@ echo -e "\n# Detected binary files\n" >>.gitattributes
 echo -e "${YELLOW}Appending binary files${RESET}"
 printf '%s\0' "${extensions[@]}" |
     grep -z 'binary' | cut -zd: -f1 |
+    sort -zu |
     while IFS= read -r -d '' ext; do
         echo "*.$ext binary" >>.gitattributes
     done

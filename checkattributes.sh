@@ -17,14 +17,14 @@ find . -type f ! -path '*/.git/*' -empty -print -delete
 mapfile -t extensions < <(
     find . -type f ! -path '*/.git/*' -print0 |
         xargs -0 -r file -N --mime-encoding |
-        while IFS= read -r f; do echo "${f##*.}"; done |
-        sort -u
+        while IFS= read -r f; do echo "${f##*.}"; done
 )
 
 # Filter all extension to check against gitattributes
 echo -e "${YELLOW}Checking extensions against .gitattributes${RESET}"
 printf '%s\0' "${extensions[@]}" |
     cut -zd: -f1 |
+    sort -zu |
     while IFS= read -r -d '' ext; do
         if ! grep -q "^\*.$ext" .gitattributes 2>/dev/null; then
             echo -e "${RED}$ext${RESET}" # Print in red if not found
