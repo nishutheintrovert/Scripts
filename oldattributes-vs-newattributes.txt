@@ -1,0 +1,36 @@
+$ speed.sh old_Attributes.sh new_Attributes.sh
+repo_small===========================
+old_Attributes.sh
+
+real    0m8.975s
+user    0m2.766s
+sys     0m8.187s
+new_Attributes.sh
+
+real    0m0.679s
+user    0m0.200s
+sys     0m0.522s
+repo_medium===========================
+old_Attributes.sh
+
+real    1m26.974s
+user    0m28.254s
+sys     1m20.979s
+new_Attributes.sh
+
+real    0m4.112s
+user    0m0.981s
+sys     0m3.134s
+repo_large===========================
+old_Attributes.sh
+
+real    7m31.589s
+user    2m22.890s
+sys     6m54.309s
+new_Attributes.sh
+
+real    0m20.896s
+user    0m6.255s
+sys     0m15.681s
+
+3 Repositories
