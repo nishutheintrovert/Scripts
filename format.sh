@@ -10,23 +10,22 @@ CYAN='\033[0;96m'
 WHITE='\033[0;97m'
 RESET='\033[0m'
 
-# Collect all non-binary text files into array (excluding .git)
-mapfile -d '' files < <(
+# Collect all non-binary (text) files into array (excluding .git)
+mapfile -t files < <(
     find . -type f ! -path '*/.git/*' -print0 |
-        xargs -0 -r file --mime-encoding |
+        xargs -0r file --mime-encoding |
         grep -v 'binary' |
-        cut -d: -f1 |
-        tr '\n' '\0'
+        cut -d: -f1
 )
 
 # --- Trim trailing spaces and tabs ---
 echo -e "${RED}Trimming Whitespaces at end of lines${RESET}"
-printf '%s\0' "${files[@]}" | xargs -0 -r -P 4 -n 10 sed -i 's/[ \t]\+$//'
+printf '%s\0' "${files[@]}" | xargs -0r sed -i 's/[ \t]\+$//'
 
 # --- Remove trailing empty lines, ensure final newline ---
 echo -e "${GREEN}Trimming empty newlines at end of file${RESET}"
 echo -e "${YELLOW}Adding trailing newline at end of file${RESET}"
-printf '%s\0' "${files[@]}" | xargs -0 -r -P 4 -n 10 sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' -e '$a\'
+printf '%s\0' "${files[@]}" | xargs -0r sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' -e '$a\'
 
 # --- Format shell scripts ---
 echo -e "${BLUE}Formatting shell scripts${RESET}"
@@ -34,13 +33,13 @@ shfmt -l -w -i=4 -ci -ln=bash ./
 
 # --- Convert all files to CRLF ---
 echo -e "${MAGENTA}Converting files to CRLF line endings${RESET}"
-printf '%s\0' "${files[@]}" | xargs -0 -r -P 4 -n 10 unix2dos >/dev/null 2>&1
+printf '%s\0' "${files[@]}" | xargs -0r unix2dos >/dev/null 2>&1
 
 # --- Convert Unix specific files to LF ---
 echo -e "${CYAN}Converting Unix based files to LF line endings${RESET}"
 find . ! -path '*/.git/*' -type f \
-    \( -name "*.bash" -o -name "*.fish" -o -name "*.ksh" -o -name "*.sh" -o -name "*.zsh" \) \
-    -print0 | xargs -0 -r -P 4 -n 10 dos2unix >/dev/null 2>&1
+    \( -name "*.bash" -o -name "*.fish" -o -name "*.ksh" -o -name "*.sh" -o -name "*.zsh" \) -print0 |
+    xargs -0r dos2unix >/dev/null 2>&1
 
 # --- Reset desktop.ini files attributes to be system and hidden
 attrib +s +h desktop.ini
