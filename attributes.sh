@@ -41,14 +41,15 @@ mapfile -t extensions < <(
     find . -type f ! -path '*/.git/*' -print0 |
         xargs -0 -r file -N --mime-encoding |
         while IFS= read -r f; do echo "${f##*.}"; done
-    # awk -F'[./:]+' '{print $(NF-1) ":" $(NF)}'
+    # awk -F'[./:]+' '{print $(NF-1) ":" $(NF)}' # Remove filepath from output (same as above while loop)
 )
 
 # Filter text files and rules to .gitattributes
 echo -e "${CYAN}Appending text files${RESET}"
 printf '%s\0' "${extensions[@]}" |
     grep -zv 'binary' | cut -zd: -f1 |
-    awk -v RS='\0' '!seen[$0]++ { printf "%s\0", $0 }' |
+    sort -zu | # Removes duplicates and sorts
+    # awk -v RS='\0' '!seen[$0]++ { printf "%s\0", $0 }' | # Deduplicate without sorting
     while IFS= read -r -d '' ext; do
         if [[ -n ${eol_settings[$ext]} ]]; then
             echo "*.$ext text eol=${eol_settings[$ext]}"
@@ -64,7 +65,8 @@ echo -e "\n# Detected binary files\n" >>.gitattributes
 echo -e "${YELLOW}Appending binary files${RESET}"
 printf '%s\0' "${extensions[@]}" |
     grep -z 'binary' | cut -zd: -f1 |
-    awk -v RS='\0' '!seen[$0]++ { printf "%s\0", $0 }' |
+    sort -zu | # Removes duplicates and sorts
+    # awk -v RS='\0' '!seen[$0]++ { printf "%s\0", $0 }' | # Deduplicate without sorting
     while IFS= read -r -d '' ext; do
         echo "*.$ext binary"
     done >>.gitattributes
