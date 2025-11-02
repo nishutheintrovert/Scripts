@@ -10,15 +10,8 @@ CYAN='\033[0;96m'
 WHITE='\033[0;97m'
 RESET='\033[0m'
 
-# Determine the git log option based on the input argument
-# if [ "$1" == "--decorate" ]; then
-#     Argument="--decorate"
-# else
-#     Argument="--no-decorate"
-# fi
-
 # Print the start banner with purple color
-clear
+clear -x
 echo -e "${MAGENTA}************************************************************************${RESET}"
 
 # Array of directories
@@ -42,7 +35,7 @@ count=0
 # Iterate through the list and run 'git status' for each directory
 for dir in "${directories[@]}"; do
     echo -e "${CYAN}cd $dir${RESET}"
-    cd "$dir" && git log --max-count=1 # $Argument
+    cd "$dir" && git log --max-count=1 --pretty=format:"%Cred%h%C(auto)%d - %C(blue)%s%Creset"
     count=$((count + 1))
 done
 
