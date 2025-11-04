@@ -53,3 +53,12 @@ cd "$(dirname "$0")" || exit 1
 
 # Removes the symbolic reference to the default branch (removes extra origin/HEAD)
 git remote set-head origin --delete
+
+# Crop image from svg
+magick -background none -density 300 "Blossom_Dark.svg" -fill white -colorize 100% -resize "512x512^" -gravity center -extent 512x512 "output.png"
+
+# Convert png to icon with transparency
+magick "input.png" -background none -alpha on -define icon:auto-resize=256,128,64,48,32,16 -compress none "output.ico"
+
+# Remove audio track 2 (mic) from obs recorded file
+ffmpeg -i "input.mp4" -map 0 -map -0:a:1 -c copy "output.mp4"
