@@ -10,9 +10,19 @@ CYAN='\033[0;96m'
 WHITE='\033[0;97m'
 RESET='\033[0m'
 
+# Scripts locations
 newgitprompt="/C/Program Files/Git/etc/profile.d/git-prompt.sh"
 oldgitprompt="/D/Config/old_git-prompt.sh"
 configgitprompt="/D/Config/git-prompt.sh"
+
+# Request elevation using powershell if not already admin
+if ! net session >/dev/null 2>&1; then
+    if ! powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Start-Process 'C:\\Program Files\\Git\\git-bash.exe' -ArgumentList '$0' -Verb RunAs"; then
+        read -rsn1
+        exit 1
+    fi
+    exit 0
+fi
 
 # Check that all files exist, print error for those who don't
 for file in "$newgitprompt" "$oldgitprompt" "$configgitprompt"; do
@@ -31,6 +41,7 @@ done
 if cmp -s "$newgitprompt" "$oldgitprompt"; then
     cp "$configgitprompt" "$newgitprompt"
     echo -e "${GREEN}Files matched. Replaced git-prompt successfully.${RESET}"
+    read -rsn1
     exit 0
 else
     echo -e "${RED}Warning: $newgitprompt and $oldgitprompt differ. Not replacing.${RESET}"
