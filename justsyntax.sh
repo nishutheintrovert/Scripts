@@ -62,3 +62,9 @@ magick "input.png" -background none -alpha on -define icon:auto-resize=256,128,6
 
 # Remove audio track 2 (mic) from obs recorded file
 ffmpeg -i "input.mp4" -map 0 -map -0:a:1 -c copy "output.mp4"
+
+# Set all black pixels to be transparent
+magick input.png -fuzz 5% -transparent black output.png
+
+# Set all white pixels to be transparent
+magick output.png -fuzz 5% -transparent white output.png
