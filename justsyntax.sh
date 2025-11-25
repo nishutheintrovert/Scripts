@@ -45,7 +45,7 @@ for file in ./Pics/*.jpg; do
     sleep 20
 done
 
-# Exit on error, unset variable, or pipe failure
+# Exit on error, unset variable, or pipe failure, use wisely
 set -euo pipefail
 
 # Move to the directory where this script resides
@@ -68,3 +68,23 @@ magick input.png -fuzz 5% -transparent black output.png
 
 # Set all white pixels to be transparent
 magick output.png -fuzz 5% -transparent white output.png
+
+# Upscale image to 200% without losing quality and accuracy
+magick input.png -filter Lanczos -resize 200% -adaptive-sharpen 0x2 output.png
+
+# Convert vector based pdf to ppm then ppm to png
+pdftoppm -r 300 "input.pdf" "output"
+magick "output-000001.ppm" "output.png"
+
+# Convert rectangular images to be square shaped
+magick input.png -gravity center -background white -extent "%[fx:max(w,h)]x%[fx:max(w,h)]" output.png
+
+# Add white padding to image
+magick input.png -gravity center -background white -extent 1024x1024 output.png
+
+# To get exact return code of pipeline
+echo "${PIPESTATUS[*]}"
+
+# examples of using exec
+exec attributes.sh   # Runs attributes.sh in current session and exits
+(exec attributes.sh) # Runs attributes.sh in new session and exits
