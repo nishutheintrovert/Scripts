@@ -1,0 +1,117 @@
+{
+    "status": 200,
+    "data": {
+        "account": {
+            "name": "itsme",
+            "tag": "NISHU",
+            "puuid": "86b05ddf-ed8b-50dd-994d-46769b29b66c"
+        },
+        "history": [
+            {
+                "tier": {
+                    "id": 24,
+                    "name": "Immortal 1"
+                },
+                "match_id": "d558d979-8155-4c77-9819-f81bab28e305",
+                "map": {
+                    "id": "2c9d57ec-4431-9c5e-2939-8f9ef6dd5cba",
+                    "name": "Bind"
+                },
+                "season": {
+                    "id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+                    "short": "e10a6"
+                },
+                "rr": 0,
+                "last_change": -18,
+                "elo": 2100,
+                "refunded_rr": 0,
+                "was_derank_protected": false,
+                "date": "2026-01-07T07:32:02.764Z"
+            },
+            {
+                "tier": {
+                    "id": 24,
+                    "name": "Immortal 1"
+                },
+                "match_id": "20c7c63c-f222-4c72-9d72-917a3be76a02",
+                "map": {
+                    "id": "fd267378-4d1d-484f-ff52-77821ed10dc2",
+                    "name": "Pearl"
+                },
+                "season": {
+                    "id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+                    "short": "e10a6"
+                },
+                "rr": 10,
+                "last_change": 14,
+                "elo": 2110,
+                "refunded_rr": 0,
+                "was_derank_protected": false,
+                "date": "2026-01-06T23:39:34.705Z"
+            },
+            {
+                "tier": {
+                    "id": 23,
+                    "name": "Ascendant 3"
+                },
+                "match_id": "3bd214e1-6108-430d-b1c8-1409754000b7",
+                "map": {
+                    "id": "2bee0dc9-4ffe-519b-1cbd-7fbe763a6047",
+                    "name": "Haven"
+                },
+                "season": {
+                    "id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+                    "short": "e10a6"
+                },
+                "rr": 96,
+                "last_change": 18,
+                "elo": 2096,
+                "refunded_rr": 0,
+                "was_derank_protected": false,
+                "date": "2026-01-06T22:39:38.314Z"
+            },
+            {
+                "tier": {
+                    "id": 23,
+                    "name": "Ascendant 3"
+                },
+                "match_id": "e4d06178-ebee-40d5-92f7-97410a2f73d0",
+                "map": {
+                    "id": "224b0a95-48b9-f703-1bd8-67aca101a61f",
+                    "name": "Abyss"
+                },
+                "season": {
+                    "id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+                    "short": "e10a6"
+                },
+                "rr": 78,
+                "last_change": 18,
+                "elo": 2078,
+                "refunded_rr": 0,
+                "was_derank_protected": false,
+                "date": "2026-01-06T22:18:23.564Z"
+            },
+            {
+                "tier": {
+                    "id": 23,
+                    "name": "Ascendant 3"
+                },
+                "match_id": "7039b5e9-b241-4d43-922f-a20131f8706a",
+                "map": {
+                    "id": "1c18ab1f-420d-0d8b-71d0-77ad3c439115",
+                    "name": "Corrode"
+                },
+                "season": {
+                    "id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+                    "short": "e10a6"
+                },
+                "rr": 60,
+                "last_change": 19,
+                "elo": 2060,
+                "refunded_rr": 0,
+                "was_derank_protected": false,
+                "date": "2026-01-06T21:55:40.069Z"
+            }
+        ]
+    }
+}
