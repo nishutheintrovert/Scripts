@@ -1,0 +1,17 @@
+{
+    "status": 200,
+    "data": {
+        "puuid": "86b05ddf-ed8b-50dd-994d-46769b29b66c",
+        "region": "ap",
+        "account_level": 312,
+        "name": "itsme",
+        "tag": "NISHU",
+        "card": "29f89efd-4613-c244-fc54-8fb6da4f88e3",
+        "title": "9f294ab8-4b0a-4c3f-711c-cb89ca4d3ad5",
+        "platforms": [
+            "PC",
+            "CONSOLE"
+        ],
+        "updated_at": "2026-01-18T18:13:11.444Z"
+    }
+}
