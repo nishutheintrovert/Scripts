@@ -13,3 +13,6 @@
 *.sh text eol=lf
 *.txt text
 *.vbs text eol=crlf
+
+# Detected binary files
+*.png binary
