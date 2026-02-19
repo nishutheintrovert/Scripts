@@ -88,3 +88,9 @@ echo "${PIPESTATUS[*]}"
 # examples of using exec
 exec attributes.sh   # Runs attributes.sh in current session and exits
 (exec attributes.sh) # Runs attributes.sh in new session and exits
+
+# see all exif information on terminal
+exiftool image.jpg
+
+# remove exif information from image
+exiftool -all= image.jpg
