@@ -94,3 +94,9 @@ exiftool image.jpg
 
 # remove exif information from image
 exiftool -all= image.jpg
+
+# cut at colon delimeter and select field 1
+cut -d: -f1
+
+# trim newlines and replace them with null character
+tr '\n' '\0'
