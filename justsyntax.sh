@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 exit #Syntax file, do not execute
 
 #To rename .txt files to .sh files
