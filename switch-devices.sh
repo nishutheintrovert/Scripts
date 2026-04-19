@@ -9,7 +9,7 @@ RESET='\033[0m'
 # 1. Pipeline: Run svcl -> Strip BOM
 # MSYS_NO_PATHCONV=1 ensures '/sjson' stays intact (no more needed)
 # sed '1s/^\xEF\xBB\xBF//' strips the UTF-8 BOM from the stream
-JSON_DATA=$("C:\Tools\svcl-x64\svcl.exe" //sjson | sed '1s/^\xEF\xBB\xBF//')
+JSON_DATA=$("C:\Tools\svcl-x64\svcl.exe" //sjson | tr -d '\r' | sed '1s/^\xEF\xBB\xBF//')
 
 # 2. Parse with jq for both devices
 # Filtering by "Type" == "Device" and "Direction" == "Render" ensures we grab the actual speakers, not subunits or applications
@@ -33,14 +33,17 @@ echo -e "${GREEN}Found boAt IM-1000D ID: ${CYAN}$BOAT_ID${RESET}"
 echo -e "${GREEN}Found Realtek(R) Audio ID: ${CYAN}$SPEAKER_ID${RESET}"
 
 # 4. Construct the commands
-CUSTOM_CMD='"C:\Tools\svcl-x64\svcl.exe" /stdout /SwitchDefault "'$SPEAKER_ID'" "'$BOAT_ID'" "all"'
+CUSTOM_CMD=$(printf '"C:\Tools\svcl-x64\svcl.exe" /stdout /SwitchDefault "%s" "%s" "all"' "$SPEAKER_ID" "$BOAT_ID")
 HoeKey_CMD="@^N=run | $CUSTOM_CMD | 2"
 
 # 5. Echo terminal command on stdout
+echo ""
+echo ""
 echo "$CUSTOM_CMD"
+echo ""
+echo ""
 
 # 6. Copy hoekey config command to clipboard
-echo "$HoeKey_CMD" | clip
+printf '%s' "$HoeKey_CMD" | clip.exe
 
 echo -e "${GREEN}HoeKey config command copied to clipboard!${RESET}"
-read -rsn1
