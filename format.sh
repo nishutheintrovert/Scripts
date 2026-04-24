@@ -29,15 +29,20 @@ get_text_files() {
     fi
 }
 
-# --- Single File Mode vs Directory Scan ---
-if [[ -n "$1" && -f "$1" ]]; then
-    echo -e "${CYAN}Targeting single file: $1${RESET}"
-    if ! file --mime-encoding "$1" | grep -q 'binary'; then
-        files=("$1")
-    else
-        echo -e "${RED}Skipped: $1 is a binary file.${RESET}"
-        exit 0
-    fi
+# --- Argument Mode vs Directory Scan ---
+if [[ $# -gt 0 ]]; then
+    echo -e "${CYAN}Targeting specified files...${RESET}"
+    for f in "$@"; do
+        if [[ -f "$f" ]]; then
+            if ! file --mime-encoding "$f" | grep -q 'binary'; then
+                files+=("$f")
+            else
+                echo -e "${RED}Skipped: $f is a binary file.${RESET}"
+            fi
+        else
+            echo -e "${YELLOW}Warning: $f is not a valid file.${RESET}"
+        fi
+    done
 else
     # Run CheckAttributes.sh first for full directory scans
     echo -e "${YELLOW}Running CheckAttributes.sh...${RESET}"
