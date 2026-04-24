@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+#    Author    : Nishikant Kanunje
+#    Date    : 24/04/2026
+#    Purpose    : Safely and quickly setup remote for repositories
 
 # Define ANSI color variables
 RED='\033[0;31m'
@@ -33,9 +37,13 @@ if remote=$(gh repo view "$reponame" --json url --template "{{.url}}" 2>/dev/nul
         exit 1
     fi
 else
+    # Force the current directory into a Unix/POSIX-style path
+    unix_pwd=$(cygpath -u "$PWD")
+    repo_desc="cd $unix_pwd"
+
     # Create GitHub repository and store the remote URL
     echo -e "${GREEN}Creating remote ${MAGENTA}$reponame${GREEN} on ${BLUE}GitHub${RESET}"
-    if ! remote=$(gh repo create "$reponame" --private -d "cd $PWD" 2>/dev/null); then
+    if ! remote=$(gh repo create "$reponame" --private -d "$repo_desc" 2>/dev/null); then
         echo -e "${RED}Failed to create repository on ${BLUE}GitHub${RESET}"
         exit 1
     fi
