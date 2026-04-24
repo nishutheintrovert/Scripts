@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+#    Author    : Nishikant Kanunje
+#    Date    : 24/04/2026
+#    Purpose    : Perform custom git log on list of repositories
 
 # Define ANSI color variables
 RED='\033[0;31m'
@@ -22,11 +26,13 @@ directories=(
     "/d/Config"
     "/d/Documents"
     "/d/Environment"
-    "/d/Playground"
     "/d/Registry"
     "/d/Scripts"
     "/d/Text"
     "/d/skinview3d"
+    "/d/valorant-group-rank-fetcher"
+    "/d/Valorant-Rank-Fetcher"
+    "/d/Valorant-Settings-Synchronizer"
 )
 
 # Initialize a counter for numbering the directories
