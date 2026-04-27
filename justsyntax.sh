@@ -100,3 +100,15 @@ cut -d: -f1
 
 # trim newlines and replace them with null character
 tr '\n' '\0'
+
+# make .fsh files run without --login and -i flags globally
+ftype fast_shell_file="C:\Program Files\Git\usr\bin\mintty.exe" -e /usr/bin/bash --noprofile --norc "%1" %*
+
+# revert above command
+ftype fast_shell_file="C:\Program Files\Git\bin\bash.exe" --login -i "%1" %*
+
+# Minimize current (mintty) terminal
+printf '\e[1t'
+
+# Restore current (mintty) terminal
+printf '\e[2t'
