@@ -18,22 +18,8 @@ RESET='\033[0m'
 clear -x
 echo -e "${MAGENTA}************************************************************************${RESET}"
 
-# Array of directories
-directories=(
-    "/d/AHK"
-    "/d/Codespace"
-    "/d/College"
-    "/d/Config"
-    "/d/Documents"
-    "/d/Environment"
-    "/d/Registry"
-    "/d/Scripts"
-    "/d/Text"
-    "/d/skinview3d"
-    "/d/valorant-group-rank-fetcher"
-    "/d/Valorant-Rank-Fetcher"
-    "/d/Valorant-Settings-Synchronizer"
-)
+# Source array of directories
+source repositories.sh
 
 # Initialize a counter for numbering the directories
 count=0
