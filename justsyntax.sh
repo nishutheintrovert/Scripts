@@ -112,3 +112,8 @@ printf '\e[1t'
 
 # Restore current (mintty) terminal
 printf '\e[2t'
+
+# i dont know why this is here but there you go
+echo -ne "✅\n❎\n"
+echo -ne "✔\n✖\n"
+echo -ne "❗\n‼\n⚠\n"
