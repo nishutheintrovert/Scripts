@@ -117,3 +117,18 @@ printf '\e[2t'
 echo -ne "✅\n❎\n"
 echo -ne "✔\n✖\n"
 echo -ne "❗\n‼\n⚠\n"
+
+# Extract basename of pwd
+$(basename "$PWD")
+
+# Delete binary files
+find . -type f ! -path '*/.git/*' -print0 | xargs -0r file --mime-encoding | grep 'binary' | cut -d':' -f1 | xargs -r -d '\n' rm -f
+
+# Filter text files
+find . -type f ! -path '*/.git/*' -print0 | xargs -0r file --mime-encoding | grep -v 'binary' | cut -d':' -f1
+
+# Dry-run delete text files with no shebang
+find . -type f ! -path '*/.git/*' -print0 | xargs -0r file --mime-encoding | grep -v 'binary' | cut -d':' -f1 | xargs -r -d '\n' sh -c 'for f do [ "$(head -c 2 "$f")" != "#!" ] && echo "Would delete: $f"; done' sh
+
+# Delete text files with no shebang
+find . -type f ! -path '*/.git/*' -print0 | xargs -0r file --mime-encoding | grep -v 'binary' | cut -d':' -f1 | xargs -r -d '\n' sh -c 'for f do [ "$(head -c 2 "$f")" != "#!" ] && rm -v "$f"; done' sh
