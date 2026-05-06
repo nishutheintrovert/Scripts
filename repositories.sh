@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #    Author    : Nishikant Kanunje
-#    Date    : 28/04/2026
+#    Date    : 06/05/2026
 #    Purpose    : Store repositories locations with lf line endings safely to be sourced by GitST.sh, GitLog.sh, Repos.sh
 
 directories=(
@@ -13,9 +13,10 @@ directories=(
     "/d/Environment"
     "/d/Registry"
     "/d/Scripts"
-    "/d/Text"
     "/d/skinview3d"
+    "/d/Text"
     "/d/valorant-group-rank-fetcher"
+    "/d/valorant-login-helper"
     "/d/Valorant-Rank-Fetcher"
     "/d/Valorant-Settings-Syncer"
 )
