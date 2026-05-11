@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #    Author    : Nishikant Kanunje
-#    Date    : 24/04/2026
+#    Date    : 07/05/2026
 #    Purpose    : Check if all file extensions are in .gitattributes file
 
 # Define ANSI color variables
@@ -14,57 +14,75 @@ CYAN='\033[0;96m'
 WHITE='\033[0;97m'
 RESET='\033[0m'
 
+# Get git root
 GIT_ROOT="."
-raw_files=()
-
-# 1. Smart directory scanning (Respects .gitignore if available)
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    # Grab the root of the repository
     GIT_ROOT=$(git rev-parse --show-toplevel)
-    mapfile -t raw_files < <(git ls-files -c -o --exclude-standard)
-else
-    mapfile -t raw_files < <(find . -type f ! -path '*/.git/*')
 fi
 
-# 2. Delete empty files and build a clean array of valid files
-valid_files=()
-for f in "${raw_files[@]}"; do
-    if [[ -f "$f" ]]; then
-        if [[ ! -s "$f" ]]; then
-            rm "$f"
-        else
-            valid_files+=("$f")
-        fi
-    fi
-done
+# Check for .gitattributes file's existance
+GITATTR_FILE="$GIT_ROOT/.gitattributes"
 
-# Exit early if no files to process
-if [[ ${#valid_files[@]} -eq 0 ]]; then
-    echo -e "${YELLOW}No files to check.${RESET}"
+if [[ ! -f "$GITATTR_FILE" ]]; then
+    echo -e "${YELLOW}No .gitattributes file found at $GITATTR_FILE${RESET}"
     exit 0
 fi
 
-# 3. .gitattributes file's location
-GITATTR_FILE="$GIT_ROOT/.gitattributes"
 echo -e "${YELLOW}Checking extensions against ${GITATTR_FILE}${RESET}"
 
-# 4. Stream the valid array into the processing pipeline
-if [[ -f "$GITATTR_FILE" ]]; then
-    printf '%s\n' "${valid_files[@]}" |
-        while IFS= read -r f; do
-            filename=$(basename "$f")
-            if [[ "$filename" == *.* ]]; then
-                echo "${filename##*.}"
-            fi
-        done |
-        sort -u |
-        while IFS= read -r ext; do
-            if ! grep -q "^\*.$ext" "$GITATTR_FILE" 2>/dev/null; then
-                echo -e "${RED}$ext${RESET}" # Print in red if not found
-            fi
-        done
+# Read patterns from .gitattributes into an associative array
+declare -A attributed_patterns
+while read -r line || [[ -n "$line" ]]; do
+    # Skip comments and empty lines
+    if [[ "$line" =~ ^# ]] || [[ -z "${line// /}" ]]; then
+        continue
+    fi
+
+    # Extract the exact pattern (the first word on the line)
+    pattern="${line%% *}"
+    attributed_patterns["$pattern"]=1
+done <"$GITATTR_FILE"
+
+# Smart directory scanning
+raw_files=()
+if [[ "$GIT_ROOT" != "." ]]; then
+    # Includes tracked (-c) untracked (-o) and ignored (--exclude-standard) files
+    mapfile -t raw_files < <(git ls-files -c -o --exclude-standard)
 else
-    echo -e "${YELLOW}No .gitattributes file found at $GITATTR_FILE${RESET}"
+    mapfile -t raw_files < <(find . -type d -name ".git" -prune -o -type f)
 fi
+
+# Processing & Deduplication
+
+declare -A seen_patterns
+for f in "${raw_files[@]}"; do
+    # Skip non-files or empty files; delete empty ones
+    if [[ ! -s "$f" ]]; then
+        [[ -f "$f" ]] && rm "$f"
+        continue
+    fi
+
+    # Determine exact gitattribute pattern
+    filename="${f##*/}"
+
+    if [[ "$filename" == *.* && "$filename" != .* ]]; then
+        # Standard files with extensions
+        ext="${filename##*.}"
+        pattern="*.$ext"
+    else
+        # Extensionless files and dotfiles
+        pattern="$filename"
+    fi
+
+    # Build seen pattern array to de-duplicate
+    if [[ -z "${seen_patterns[$pattern]}" ]]; then
+        seen_patterns["$pattern"]=1
+
+        # Check against patterns in .gitattribute array
+        if [[ -z "${attributed_patterns[$pattern]}" ]]; then
+            echo -e "${WHITE}$pattern ${RED}Not Found${RESET}" # Print warning if not found
+        fi
+    fi
+done
 
 echo -e "${GREEN}Done!================================${RESET}"
