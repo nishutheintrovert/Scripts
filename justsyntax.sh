@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-exit #Syntax file, do not execute
+code $0
+exit 1 #Syntax file, do not execute
 
 #To rename .txt files to .sh files
 for file in *.txt; do mv "$file" "${file%.txt}.sh"; done
@@ -132,3 +133,27 @@ find . -type f ! -path '*/.git/*' -print0 | xargs -0r file --mime-encoding | gre
 
 # Delete text files with no shebang
 find . -type f ! -path '*/.git/*' -print0 | xargs -0r file --mime-encoding | grep -v 'binary' | cut -d':' -f1 | xargs -r -d '\n' sh -c 'for f do [ "$(head -c 2 "$f")" != "#!" ] && rm -v "$f"; done' sh
+
+# Remove file from repository's history
+git filter-repo --invert-paths --force \
+    --path dummy.txt
+
+# Rename file from repository's history
+git filter-repo --path-rename full/path/to/old_file:full/path/to/new_file
+
+assoc .fsh=fshfile
+ftype fshfile
+ftype fshfile="C:\Program Files\Git\bin\bash.exe" --noprofile --norc "%1" %*
+ftype fshfile="C:\Program Files\Git\bin\bash.exe" --noprofile --norc -O expand_aliases off "%1" %*
+
+# Compare contents of files (Switch files to find unique in smaller-list.txt)
+grep -v -F -x -f smaller-list.txt bigger-list.txt >list-not-in-smaller-but-in-bigger.txt
+
+# Print all unique entries in both files
+sort smaller-list.txt bigger-list.txt | uniq -u >all-unique-items.txt
+
+# Detailed summery of unique items in both
+comm -3 <(sort smaller-list.txt) <(sort bigger-list.txt) >all-unique-items.txt
+
+# Open explorer window for each first level directories
+find ./ -mindepth 1 -maxdepth 1 -type d | while read -r f; do explorer.exe "$(cygpath -w "$f")"; done
