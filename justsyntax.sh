@@ -103,21 +103,24 @@ cut -d: -f1
 tr '\n' '\0'
 
 # make .fsh files run without --login and -i flags globally
-ftype fast_shell_file="C:\Program Files\Git\usr\bin\mintty.exe" -e /usr/bin/bash --noprofile --norc "%1" %*
+assoc .fsh=fast_shell_file
+ftype fast_shell_file="C:\Program Files\Git\usr\bin\mintty.exe" -w max -e /usr/bin/bash --noprofile --norc "%1" %*
 
-# revert above command
+# revert above commands
+assoc .fsh=
 ftype fast_shell_file="C:\Program Files\Git\bin\bash.exe" --login -i "%1" %*
 
 # Minimize current (mintty) terminal
-printf '\e[1t'
-
-# Restore current (mintty) terminal
 printf '\e[2t'
 
+# Restore current (mintty) terminal
+printf '\e[1t'
+
 # i dont know why this is here but there you go
-echo -ne "✅\n❎\n"
-echo -ne "✔\n✖\n"
-echo -ne "❗\n‼\n⚠\n"
+echo "✅ ❎"
+echo "✔ ✖"
+echo "❗ ‼ ⚠"
+echo "⛔ 🛑 ❌ 🚫"
 
 # Extract basename of pwd
 $(basename "$PWD")
@@ -157,3 +160,23 @@ comm -3 <(sort smaller-list.txt) <(sort bigger-list.txt) >all-unique-items.txt
 
 # Open explorer window for each first level directories
 find ./ -mindepth 1 -maxdepth 1 -type d | while read -r f; do explorer.exe "$(cygpath -w "$f")"; done
+
+# Combine two icons into one using -gravity
+combineicons() {
+    if [ "$#" -ne 4 ]; then
+        echo "Usage: combine2ico <background-image> <foreground-image> <size> <output-name>"
+        return 1
+    fi
+
+    local bg="$1"
+    local fg="$2"
+    local size="$3"
+    local out="$4"
+
+    # Use ImageMagick 7 to composite, resize, crop, and convert to .ico
+    magick "$bg" "$fg" -gravity center -composite \
+        -resize x${size} -gravity center -crop ${size}x${size}+0+0 +repage \
+        -colors 256 -background transparent "$out"
+
+    echo "Success! Saved as $out in the current directory."
+}
