@@ -70,6 +70,9 @@ magick input.png -fuzz 5% -transparent black output.png
 # Set all white pixels to be transparent
 magick output.png -fuzz 5% -transparent white output.png
 
+# Create transparent icon
+magick -size 256x256 xc:transparent ./transparent.ico
+
 # Upscale image to 200% without losing quality and accuracy
 magick input.png -filter Lanczos -resize 200% -adaptive-sharpen 0x2 output.png
 
