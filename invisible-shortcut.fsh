@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-#    Author    : Nishikant Kanunje
-#    Date    : 02/06/2026
-#    Purpose    : Create invisible shortcut at desktop
+#	Author	: Nishikant Kanunje
+#	Date	: 03/06/2026
+#	Purpose	: Create invisible shortcut at desktop
 
 # Make sure direcotory exists
 ICON_DIR="D:/Pictures/Icons"
@@ -10,9 +10,13 @@ ICON_DIR="D:/Pictures/Icons"
 
 # Create icon if doesn't exists
 ICON_FILE="transparent.ico"
+
 if [ ! -f "$ICON_DIR/$ICON_FILE" ]; then
     echo -e "Creating icon..."
-    magick -size 256x256 xc:transparent "$ICON_DIR/$ICON_FILE"
+    # magick -size 256x256 xc:transparent -colorspace sRGB -type truecolormatte -define icon:auto-resize=256,128,64,48,32,16 "$ICON_DIR/$ICON_FILE"
+    # magick shit doesn't work, its a fucking rabbithole
+    # this one actually worked like a fucking magick
+    /usr/bin/bash "./goated-transparent-icon.fsh" "$ICON_DIR/$ICON_FILE"
 fi
 
 # Unique naming for shortcuts
