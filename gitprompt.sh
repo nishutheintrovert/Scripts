@@ -44,6 +44,9 @@ if cmp -s "$newgitprompt" "$oldgitprompt"; then
     read -rsn1
     exit 0
 else
-    echo -e "${RED}Warning: $newgitprompt and $oldgitprompt differ. Not replacing.${RESET}"
+    echo -e "${RED}Warning: $newgitprompt and $oldgitprompt differ. Not replacing."
+    cp "$oldgitprompt" ~/Desktop/
+    cp "$newgitprompt" ~/Desktop/
+    echo -e "${CYAN}copied both files to desktop.${RESET}"
 fi
 read -rsn1
