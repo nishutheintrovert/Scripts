@@ -64,7 +64,15 @@ pause_and_exit() {
         echo -e "${YELLOW}Press any key to exit...${RESET}"
         read -rsn1
     fi
-    return "$exit_code" 2>/dev/null || exit "$exit_code"
+
+    # Check if the script is being sourced or executed
+    if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+        # Sourced: safely return to keep the active session alive
+        return "$exit_code"
+    else
+        # Executed: safely exit the child process
+        exit "$exit_code"
+    fi
 }
 
 # Function to handle install/uninstall/disable logic
@@ -243,7 +251,6 @@ packages_to_remove=(
     "com.miui.cloudservice"
     "com.google.android.apps.photos"
     "com.miui.fm"
-    "com.xiaomi.calendar"
     "com.google.android.apps.googleassistant.AssistantActivity"
     "com.google.android.apps.googleassistant"
     "com.google.android.apps.restore"
