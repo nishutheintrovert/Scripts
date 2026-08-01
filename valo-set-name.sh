@@ -26,8 +26,8 @@ echo "Launching Riot Client..."
 powershell.exe -command "Start-Process -FilePath '${RIOT_CLIENT_PATH}'"
 
 # 3. Wait for Riot Client to open
-echo "Waiting 5 seconds for initial load..."
-sleep 5
+echo "Waiting 3 seconds for initial load..."
+sleep 3
 
 # Loop to check if Riot Client is open and activate it
 while true; do
@@ -37,8 +37,8 @@ while true; do
         echo "Riot Client is open and active!"
         break
     else
-        echo "Riot Client not found yet. Waiting 3 more seconds..."
-        sleep 3
+        echo "Riot Client not found yet. Waiting 1 more seconds..."
+        sleep 1
     fi
 done
 
@@ -76,12 +76,12 @@ send_key "{ENTER}"
 sleep 5
 
 # Click terms and service slider
-neon moveto 1529x418
+MouseMover moveto 1529x418
 sleep 0.2
-neon click
+MouseMover click
 
 # Drag the slider down
-neon dragby 0x12
+MouseMover dragby 0x12
 sleep 0.2
 
 # Keyboard input for submit
