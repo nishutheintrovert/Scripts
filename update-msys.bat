@@ -3,6 +3,7 @@ setlocal
 
 :: --- CONFIGURATION ---
 set "MSYS_BIN=C:\msys64\msys2.exe"
+set "MSYS_BIN=D:\1.This_PC_Placeholder\MSYS2\msys2.exe"
 set "WINDOW_TITLE=MSYS2 MSYS Shell"
 
 :: Check for Maximize argument
