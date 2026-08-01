@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 # Find dependencies in the system PATH
-MouseMover_Path=$(command -v mousemover.exe)
-
-# Find dependencies in the system PATH
 VBS_PATH=$(command -v sendkeys.vbs)
 MouseMover_Path=$(command -v mousemover.exe)
 
