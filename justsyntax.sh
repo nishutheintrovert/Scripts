@@ -183,3 +183,15 @@ combineicons() {
 
     echo "Success! Saved as $out in the current directory."
 }
+
+# If argument passed, use it, if not passed, take current directry as argument
+if [ -n "$1" ]; then
+    path=$1
+else
+    path=./
+fi
+# Shorter version
+path="${1:-./}"
+
+# Clock for DesktopClock
+{dddd}, {dd} {MMMM}, {yyyy}  ♥  {HH:mm:ss  [hh:mm tt]}
