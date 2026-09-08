@@ -194,4 +194,5 @@ fi
 path="${1:-./}"
 
 # Clock for DesktopClock
-{dddd}, {dd} {MMMM}, {yyyy}  ♥  {HH:mm:ss  [hh:mm tt]}
+{dddd}, {dd} {MMMM}, {yyyy} ♥ {HH:mm:ss [hh:mm tt]}
+{HH:mm:ss} ♥ {dddd}, {dd} {MMMM}, {yyyy}
