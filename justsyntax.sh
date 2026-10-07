@@ -196,3 +196,7 @@ path="${1:-./}"
 # Clock for DesktopClock
 {dddd}, {dd} {MMMM}, {yyyy} ♥ {HH:mm:ss [hh:mm tt]}
 {HH:mm:ss} ♥ {dddd}, {dd} {MMMM}, {yyyy}
+
+# Batch rename example
+# Renames any files with plains in it to be the-plains
+for f in *plains.png; do [ -f "$f" ] && mv "$f" "${f/plains/the-plains}"; done
