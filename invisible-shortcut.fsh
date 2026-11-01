@@ -31,15 +31,16 @@ done
 SHORTCUT_FILE="$TARGET_DIR/$SHORTCUT_NAME.lnk"
 
 # Execute powershell to create shortcut
+WIN_SHORTCUT_FILE="${SHORTCUT_FILE//\//\\}"
+WIN_ICON_LOCATION="${ICON_DIR//\//\\}\\$ICON_FILE,0"
 TARGET_PATH="C:\Windows\System32\rundll32.exe"
 TARGET_ARGS=""
-ICON_LOCATION="$ICON_DIR/$ICON_FILE"
 
 /c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "
     \$wsh = New-Object -ComObject WScript.Shell;
-    \$lnk = \$wsh.CreateShortcut('$SHORTCUT_FILE');
+    \$lnk = \$wsh.CreateShortcut('$WIN_SHORTCUT_FILE');
     \$lnk.TargetPath = '$TARGET_PATH';
-    \$lnk.Arguments = '\"$TARGET_ARGS\"';
-    \$lnk.IconLocation = '$ICON_LOCATION';
+    \$lnk.Arguments = '$TARGET_ARGS';
+    \$lnk.IconLocation = '$WIN_ICON_LOCATION';
     \$lnk.Save();
 "
