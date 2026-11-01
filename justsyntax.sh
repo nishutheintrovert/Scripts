@@ -200,3 +200,19 @@ path="${1:-./}"
 # Batch rename example
 # Renames any files with plains in it to be the-plains
 for f in *plains.png; do [ -f "$f" ] && mv "$f" "${f/plains/the-plains}"; done
+
+# Get timestamp using pure bash
+# 10-Digit (Seconds)
+printf "%s\n" "${EPOCHREALTIME:0:10}"          # (Print timestamp)
+printf -v epoch10 "%s" "${EPOCHREALTIME:0:10}" # (Assign it to variable)
+
+# 13-Digit (Milliseconds)
+printf "%.13s\n" "${EPOCHREALTIME/./}"          # (Print timestamp)
+printf -v epoch13 "%.13s" "${EPOCHREALTIME/./}" # (Assign it to variable)
+
+# 16-Digit (Microseconds)
+printf "%.16s\n" "${EPOCHREALTIME/./}"          # (Print timestamp)
+printf -v epoch16 "%.16s" "${EPOCHREALTIME/./}" # (Assign it to variable)
+
+# Prune or print
+$ find ./dirname/ -name .git -prune -o -print
