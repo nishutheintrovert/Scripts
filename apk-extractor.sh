@@ -14,18 +14,18 @@ RESET='\033[0m'
 
 # Prevent Git for Windows (MSYS2) from converting /data/app/... into a local Windows path
 export MSYS_NO_PATHCONV=1
-
-if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-    echo -e "${MAGENTA}Usage: $0 <package_name> [output_dir]${RESET}"
-    echo -e "${CYAN}e.g.: $0 com.android.chrome${RESET}"
-    echo -e "${YELLOW}Press enter to exit...${RESET}"
-    read -rsn1
-    exit 1
+SCRIPT_NAME="$(basename "$0")"
+if [ "$#" -eq 0 ]; then
+    trap 'echo -e "${YELLOW}Press enter to exit...${RESET}"; read -rsn1' EXIT
+    echo -e "${MAGENTA}Usage: $SCRIPT_NAME <package_name>${RESET}"
+    echo -e "${CYAN}e.g.: $SCRIPT_NAME com.android.chrome${RESET}"
+    while [ -z "${PKG_NAME:-}" ]; do
+        echo -ne "${YELLOW}Enter package name: ${RESET}"
+        read -r PKG_NAME
+    done
+else
+    PKG_NAME="$*"
 fi
-
-PKG_NAME="$1"
-
-OUT_DIR="${2:-$PKG_NAME}"
 
 echo -e "${MAGENTA}Querying APK paths for: $PKG_NAME${RESET}"
 mapfile -t APK_PATHS < <(adb shell pm path "$PKG_NAME" | sed 's/^package://; s/\r$//')
@@ -35,14 +35,12 @@ if [ "${#APK_PATHS[@]}" -eq 0 ] || [ -z "${APK_PATHS[0]}" ]; then
     exit 1
 fi
 
-mkdir -p "$OUT_DIR"
-echo -e "${GREEN}Found ${#APK_PATHS[@]} file(s). Pulling into '$OUT_DIR/'...${RESET}"
+mkdir -p "$PKG_NAME"
+echo -e "${GREEN}Found ${#APK_PATHS[@]} file(s). Pulling into '$PKG_NAME/'...${RESET}"
 
 for remote_apk in "${APK_PATHS[@]}"; do
     apk_name="$(basename "$remote_apk")"
-    adb pull "$remote_apk" "$OUT_DIR/$apk_name"
+    adb pull "$remote_apk" "$PKG_NAME/$apk_name"
 done
 
-echo -e "${GREEN}Done! All files saved to: $OUT_DIR/${RESET}"
-echo -e "${YELLOW}Press enter to exit...${RESET}"
-read -rsn1
+echo -e "${GREEN}Done! All files saved to: $PKG_NAME/${RESET}"
