@@ -216,3 +216,21 @@ printf -v epoch16 "%.16s" "${EPOCHREALTIME/./}" # (Assign it to variable)
 
 # Prune or print
 $ find ./dirname/ -name .git -prune -o -print
+
+# Count the number of active devices attached
+# (Filters for lines ending with 'device', 'unauthorized', or 'recovery')
+DEVICE_COUNT=$(adb devices | grep -v "List of devices attached" | grep -c -E "\bdevice\b|\bunauthorized\b|\brecovery\b")
+
+if [ "$DEVICE_COUNT" -ne 1 ]; then
+    echo "Error: Expected exactly 1 device, but found $DEVICE_COUNT." >&2
+    exit 1
+fi
+
+echo "Success: Exactly one device is connected."
+
+# Pass android serial to a script or command when multiple adb devices are connected
+ANDROID_SERIAL="ZN5228C367" apk-extractor.sh com.wordsmobile.gunship
+ANDROID_SERIAL="2163a436" apk-extractor.sh com.wordsmobile.gunship
+
+# Shred a file
+shred -n 10 -u -z ./secret.ext
