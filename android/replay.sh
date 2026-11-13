@@ -10,8 +10,7 @@
 # adb shell "cat /dev/input/eventX > /sdcard/full_run.bin"
 # - Hit ctrl+c to stop
 # adb shell "cat /sdcard/full_run.bin > /dev/input/eventX"
-
-#!/usr/bin/env bash
+# adb shell "su -c 'dd if=/sdcard/full_run.bin of=/dev/input/eventX bs=24'"
 
 # --- CONFIGURATION ---
 EVENT_NODE="/dev/input/eventX" # Fill event number
@@ -34,7 +33,8 @@ echo -e "${GREEN}Starting full-run replay loop. Press Ctrl+C to stop.${RESET}"
 
 while true; do
     echo "Playing recorded sequence..."
-    adb shell "cat $RECORDING_FILE > $EVENT_NODE"
+
+    serialginkgo adb shell "su -c 'dd if=\"$RECORDING_FILE\" of=\"$EVENT_NODE\" bs=24'"
 
     # Safety delay efore the next loop starts
     sleep 2
